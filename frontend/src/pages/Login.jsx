@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoginForm from "../components/auth/LoginForm";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -35,23 +36,14 @@ const Login = () => {
     return (
         <div>
             <h2>Connexion</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                </div>
-
-                <div>
-                    <input type="password" placeholder="Mot de passe" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                </div>
-
-                <button type="submit">Se connecter</button>
-            </form>
-
-            {message ? <div>{message}</div> : null}
-
-            <p>
-                Pas encore de compte ? <a href="/register">S'inscrire</a>
-            </p>
+            <LoginForm
+                email={email}
+                password={password}
+                onEmailChange={(e) => setEmail(e.target.value)}
+                onPasswordChange={(e) => setPassword(e.target.value)}
+                onSubmit={handleSubmit}
+                message={message}
+            />
         </div>
     );
 };
