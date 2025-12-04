@@ -4,12 +4,15 @@ import { useNavigate } from "react-router-dom";
 const CreateArticle = () => {
     const [titre, setTitre] = useState("");
     const [contenu, setContenu] = useState("");
-    const [auteur, setAuteur] = useState("");
     const [categorie, setCategorie] = useState("");
-    const [image, setImage] = useState("");
+    const [image, setImage] = useState(null);
     const [message, setMessage] = useState("");
-    const [showPreview, setShowPreview] = useState(false);
     const navigate = useNavigate();
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setImage(file || null);
+    };
 
     useEffect(() => {
         const isLoggedIn = localStorage.getItem("userToken");
@@ -31,10 +34,6 @@ const CreateArticle = () => {
             setMessage("Le contenu est obligatoire");
             return false;
         }
-        if (!auteur.trim()) {
-            setMessage("L'auteur est obligatoire");
-            return false;
-        }
         return true;
     };
 
@@ -46,32 +45,40 @@ const CreateArticle = () => {
         }
 
         try {
+            const token = localStorage.getItem("userToken");
+
+            const formData = new FormData();
+            formData.append("titre", titre);
+            formData.append("contenu", contenu);
+            formData.append("categorie", categorie);
+            formData.append("statut", statut);
+            if (image) {
+                formData.append("image", image);
+            }
+
             const response = await fetch(`${process.env.REACT_APP_API_URL}/articles`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ titre, contenu, auteur, categorie, image, statut }),
+                body: formData,
             });
 
             const data = await response.json();
 
             if (response.ok && data.success) {
-                console.log("Article créé avec succès :", data);
                 setMessage("Article créé avec succès !");
 
                 setTitre("");
                 setContenu("");
-                setAuteur("");
                 setCategorie("");
-                setImage("");
+                setImage(null);
 
-                navigate(`/articles/${data.article.id}`);
+                navigate("/");
             } else {
                 setMessage(data.message || "Erreur lors de la création de l'article");
             }
         } catch (error) {
-            console.error("Erreur:", error);
             setMessage("Erreur de connexion au serveur");
         }
     };
@@ -96,19 +103,6 @@ const CreateArticle = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="auteur">Auteur*</label>
-                    <input
-                        type="text"
-                        id="auteur"
-                        name="auteur"
-                        value={auteur}
-                        onChange={(e) => setAuteur(e.target.value)}
-                        placeholder="Nom de l'auteur"
-                        required
-                    />
-                </div>
-
-                <div>
                     <label htmlFor="categorie">Catégorie</label>
                     <select id="categorie" name="categorie" value={categorie} onChange={(e) => setCategorie(e.target.value)}>
                         <option value="">Sélectionnez une catégorie</option>
@@ -122,7 +116,7 @@ const CreateArticle = () => {
 
                 <div>
                     <label htmlFor="image">Image (optionnel)</label>
-                    <input type="url" id="image" name="image" value={image} onChange={(e) => setImage(e.target.value)} placeholder="URL de l'image" />
+                    <input type="file" id="image" name="image" onChange={handleImageChange} accept="image/*" />
                 </div>
 
                 <div>
@@ -138,10 +132,6 @@ const CreateArticle = () => {
                 </div>
 
                 <div>
-                    <button type="button" onClick={() => setShowPreview(!showPreview)}>
-                        {showPreview ? "Masquer" : "Prévisualiser"}
-                    </button>
-
                     <button type="button" onClick={() => navigate("/")}>
                         Annuler
                     </button>
@@ -155,21 +145,6 @@ const CreateArticle = () => {
                     </button>
                 </div>
             </form>
-
-            {showPreview && (
-                <div style={{ marginTop: "2rem", padding: "1rem", border: "1px solid #ccc", borderRadius: "4px" }}>
-                    <h2>Prévisualisation</h2>
-                    <h3>{titre || "Titre de l'article"}</h3>
-                    {image && <img src={image} alt="Prévisualisation" style={{ maxWidth: "100%", height: "auto" }} />}
-                    <p>
-                        <strong>Auteur:</strong> {auteur || "Nom de l'auteur"}
-                    </p>
-                    <p>
-                        <strong>Catégorie:</strong> {categorie || "Non spécifiée"}
-                    </p>
-                    <div style={{ whiteSpace: "pre-wrap" }}>{contenu || "Contenu de l'article..."}</div>
-                </div>
-            )}
 
             {message ? <div>{message}</div> : null}
         </div>

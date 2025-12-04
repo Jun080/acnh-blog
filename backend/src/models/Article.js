@@ -6,33 +6,47 @@ const articleSchema = new mongoose.Schema(
             type: String,
             required: [true, "Le titre est obligatoire"],
             trim: true,
+            minLength: [3, "Le titre doit contenir au moins 3 caractères"],
             maxlength: [200, "Le titre ne peut pas dépasser 200 caractères"],
         },
         contenu: {
             type: String,
             required: [true, "Le contenu est obligatoire"],
             trim: true,
+            minLength: [10, "Le contenu doit contenir au moins 10 caractères"],
         },
         auteur: {
             type: String,
             ref: "User",
             required: [true, "L'auteur est obligatoire"],
         },
+        categorie: {
+            type: String,
+            required: [true, "La catégorie est obligatoire"],
+            enum: ["Technologie", "Santé", "Finance", "Éducation", "Divertissement"],
+        },
+        statut: {
+            type: String,
+            enum: ["brouillon", "publié"],
+            default: "publié",
+        },
         publie: {
             type: Boolean,
             default: false,
         },
-        publieLe: {
-            type: Date,
-        },
-        categorie: {
+        image: {
             type: String,
-            enum: ["Technologie", "Santé", "Finance", "Éducation", "Divertissement"],
         },
         vues: {
             type: Number,
             default: 0,
             min: [0, "Le nombre de vues ne peut pas être négatif"],
+        },
+        createdAt: {
+            type: Date,
+        },
+        updatedAt: {
+            type: Date,
         },
     },
     {
