@@ -3,13 +3,22 @@ import { Article } from "../models/Article.js";
 // CREATE
 async function createArticle(req, res) {
     try {
-        const { titre, contenu, auteur, categorie } = req.body;
+        const { titre, contenu, categorie, statut } = req.body;
+
+        const auteur = req.user.nom;
+
+        let imagePath = null;
+        if (req.file) {
+            imagePath = req.file.filename;
+        }
 
         const article = new Article({
             titre,
             contenu,
             auteur,
-            categorie,
+            categorie: categorie,
+            statut: statut || "publié",
+            image: imagePath,
         });
 
         const articleSauvegarde = await article.save();
@@ -17,7 +26,7 @@ async function createArticle(req, res) {
         res.status(201).json({
             success: true,
             message: "Article créé avec succès",
-            data: articleSauvegarde,
+            article: articleSauvegarde,
         });
     } catch (error) {
         res.status(500).json({

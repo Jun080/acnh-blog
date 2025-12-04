@@ -29,6 +29,8 @@ app.get("/", (req, res) => {
 
 app.use(express.json());
 
+app.use("/uploads", express.static("uploads"));
+
 app.use("/api/articles", articleRouter);
 app.use("/api/auth", authRouter);
 
