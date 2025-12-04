@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import RegisterForm from "../components/auth/RegisterForm";
 
 const Register = () => {
     const [nom, setNom] = useState("");
@@ -50,7 +51,7 @@ const Register = () => {
 
             const data = await response.json();
 
-            if (response.ok) {
+            if (response.ok && data.success) {
                 setMessage("Inscription réussie");
                 navigate("/login");
             } else {
@@ -64,36 +65,17 @@ const Register = () => {
     return (
         <div>
             <h2>Inscription</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <input type="text" placeholder="Nom" value={nom} onChange={(e) => setNom(e.target.value)} required />
-                    {errors.nom && <span>{errors.nom}</span>}
-                </div>
-
-                <div>
-                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                    {errors.email && <span>{errors.email}</span>}
-                </div>
-
-                <div>
-                    <input
-                        type="password"
-                        placeholder="Mot de passe (min 6 caractères)"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    {errors.password && <span>{errors.password}</span>}
-                </div>
-
-                <button type="submit">S'inscrire</button>
-            </form>
-
-            {message ? <div>{message}</div> : null}
-
-            <p>
-                Déjà un compte ? <a href="/login">Se connecter</a>
-            </p>
+            <RegisterForm
+                nom={nom}
+                email={email}
+                password={password}
+                onNomChange={(e) => setNom(e.target.value)}
+                onEmailChange={(e) => setEmail(e.target.value)}
+                onPasswordChange={(e) => setPassword(e.target.value)}
+                onSubmit={handleSubmit}
+                errors={errors}
+                message={message}
+            />
         </div>
     );
 };
