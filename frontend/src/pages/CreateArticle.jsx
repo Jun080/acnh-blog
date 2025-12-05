@@ -74,7 +74,7 @@ const CreateArticle = () => {
                 setCategorie("");
                 setImage(null);
 
-                navigate("/");
+                navigate(`/articles/${data.article._id}`);
             } else {
                 setMessage(data.message || "Erreur lors de la création de l'article");
             }
