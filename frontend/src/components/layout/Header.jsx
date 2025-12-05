@@ -31,6 +31,9 @@ const HeaderMenu = () => {
                                     <Link to="/articles/new">Créer un article</Link>
                                 </li>
                                 <li>
+                                    <Link to="/my-articles">Mes articles</Link>
+                                </li>
+                                <li>
                                     <button onClick={handleLogout}>Déconnexion</button>
                                 </li>
                             </>
