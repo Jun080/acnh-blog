@@ -83,4 +83,16 @@ function deleteArticle(req, res) {
         });
 }
 
-export { createArticle, getAllArticles, getArticleById, updateArticle, deleteArticle };
+// GET MY ARTICLES
+function getMyArticles(req, res) {
+    Article.find({ auteur: req.user.nom })
+        .limit(100)
+        .then(function (list) {
+            return res.json(list);
+        })
+        .catch(function (err) {
+            return res.json({ error: err.message });
+        });
+}
+
+export { createArticle, getAllArticles, getArticleById, updateArticle, deleteArticle, getMyArticles };

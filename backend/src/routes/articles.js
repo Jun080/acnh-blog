@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 import { protect } from "../middleware/auth.js";
-import { getAllArticles, getArticleById, createArticle, updateArticle, deleteArticle } from "../controllers/articleController.js";
+import { getAllArticles, getArticleById, createArticle, updateArticle, deleteArticle, getMyArticles } from "../controllers/articleController.js";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -18,6 +18,7 @@ const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.get("/", getAllArticles);
+router.get("/my-articles", protect, getMyArticles);
 router.get("/:id", getArticleById);
 
 router.use(protect);
