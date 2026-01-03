@@ -243,7 +243,10 @@ const ArticleDetail = () => {
 
                                 {isAuthor && (
                                     <div className="flex gap-3">
-                                        <button onClick={() => handleToggleStatus(article._id, article.statut)}>
+                                        <button 
+                                            onClick={() => handleToggleStatus(article._id, article.statut)}
+                                            className={`btn-ac ${article.statut === "publié" ? "btn-ac-orange" : "btn-ac-green"}`}
+                                        >
                                             {article.statut === "publié" ? "Brouillon" : "Publier"}
                                         </button>
                                         <button 
@@ -254,7 +257,7 @@ const ArticleDetail = () => {
                                         </button>
                                         <button 
                                             onClick={handleDelete}
-                                            className="px-6 py-2 bg-red-500 text-white rounded-2xl font-bold hover:bg-red-600 transition-colors"
+                                            className="btn-ac btn-ac-red"
                                         >
                                             Supprimer
                                         </button>

@@ -146,7 +146,7 @@ function Home() {
                                         placeholder="Rechercher un article..."
                                         value={searchTerm}
                                         onChange={(e) => handleSearch(e.target.value)}
-                                        className="block w-full rounded-2xl border-2 border-acnhNeutre-200 bg-acnhNeutre-100 py-2.5 pl-10 pr-4 text-acnhNeutre-900 shadow-inner placeholder:text-acnhNeutre-600 focus:border-acnhOrange-600 focus:ring-2 focus:ring-acnhOrange-600/40 focus:outline-none transition-transform duration-150 focus:scale-[1.01]"
+                                        className="block w-full rounded-2xl border-2 border-acnhNeutre-200 bg-acnhNeutre-100 py-2.5 pl-10 pr-4 text-acnhNeutre-900 placeholder:text-acnhNeutre-600"
                                     />
                                 </div>
                             </div>
@@ -190,7 +190,7 @@ function Home() {
                                                 </div>
 
                                                 <div>
-                                                    <h3 className="font-semibold text-acnhNeutre-900 mb-2 line-clamp-2">
+                                                    <h3 className="text-acnhNeutre-900 mb-2 line-clamp-2">
                                                         <Link to={`/articles/${article._id}`}>
                                                             {article.titre}
                                                         </Link>
