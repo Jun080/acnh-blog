@@ -64,24 +64,37 @@ const MyArticles = () => {
     };
 
     const handleToggleStatus = async (articleId, currentStatus) => {
-        const newStatus = currentStatus === "publié" ? "brouillon" : "publié";
-
         try {
             const token = localStorage.getItem("userToken");
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/articles/${articleId}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ statut: newStatus }),
-            });
 
-            if (response.ok) {
-                setArticles(articles.map((article) => (article._id === articleId ? { ...article, statut: newStatus } : article)));
+            if (currentStatus === "brouillon") {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/articles/${articleId}/publier`, {
+                    method: "PATCH",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    setArticles(articles.map((article) => (article._id === articleId ? { ...article, statut: "publié" } : article)));
+                } else {
+                    const data = await response.json();
+                    setMessage(data.message || "Erreur lors de la publication");
+                }
             } else {
-                const data = await response.json();
-                setMessage(data.message || "Erreur lors de la modification");
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/articles/${articleId}/brouillon`, {
+                    method: "PATCH",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    setArticles(articles.map((article) => (article._id === articleId ? { ...article, statut: "brouillon" } : article)));
+                } else {
+                    const data = await response.json();
+                    setMessage(data.message || "Erreur lors du passage en brouillon");
+                }
             }
         } catch (error) {
             setMessage("Erreur de connexion au serveur");
@@ -129,7 +142,7 @@ const MyArticles = () => {
                                 <tr key={article._id}>
                                     <td>
                                         <div>
-                                            <h3>{article.titre}</h3>
+                                            <a href={`articles/${article._id}`}><h3>{article.titre}</h3></a>
                                             <p>{article.contenu.substring(0, 100)}...</p>
                                         </div>
                                     </td>

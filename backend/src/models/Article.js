@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Comment } from "./Comment.js";
 
 const articleSchema = new mongoose.Schema(
     {
@@ -17,13 +18,17 @@ const articleSchema = new mongoose.Schema(
         },
         auteur: {
             type: String,
-            ref: "User",
             required: [true, "L'auteur est obligatoire"],
+        },
+        auteurId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: [true, "L'identifiant auteur est obligatoire"],
         },
         categorie: {
             type: String,
             required: [true, "La catégorie est obligatoire"],
-            enum: ["Technologie", "Santé", "Finance", "Éducation", "Divertissement"],
+            enum: ["Villageois", "Décoration", "Faune", "Actualités du jeu"],
         },
         statut: {
             type: String,
@@ -76,6 +81,16 @@ articleSchema.statics.findPublies = function () {
     return this.find({ publie: true }).sort({ createdAt: -1 });
 };
 
+articleSchema.statics.getCategorieIcon = function (categorie) {
+    const iconMap = {
+        "Villageois": "/img/icons/icon-villageois.svg",
+        "Décoration": "/img/icons/icon-decoration.svg",
+        "Faune": "/img/icons/icon-faune.svg",
+        "Actualités du jeu": "/img/icons/icon-actualites.svg",
+    };
+    return iconMap[categorie];
+};
+
 articleSchema.virtual("resume").get(function () {
     if (this.contenu.length <= 150) {
         return this.contenu;
@@ -90,6 +105,14 @@ articleSchema.pre("save", function (next) {
 
 articleSchema.post("save", function (doc) {
     console.log(`Article sauvegardé: ${doc._id}`);
+});
+
+articleSchema.pre("findOneAndDelete", async function (next) {
+    const articleId = this.getQuery()._id;
+    if (articleId) {
+        await Comment.deleteMany({ article: articleId });
+    }
+    next();
 });
 
 export const Article = mongoose.model("Article", articleSchema);
