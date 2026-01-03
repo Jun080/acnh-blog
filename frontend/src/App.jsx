@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CreateArticle from "./pages/CreateArticle";
+import EditArticle from "./pages/EditArticle";
 import ArticleDetail from "./pages/ArticleDetail";
 import MyArticles from "./pages/MyArticles";
 
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/articles/new" element={<CreateArticle />} />
+                    <Route path="/articles/:id/edit" element={<EditArticle />} />
                     <Route path="/articles/:id" element={<ArticleDetail />} />
                     <Route path="/my-articles" element={<MyArticles />} />
                 </Routes>
