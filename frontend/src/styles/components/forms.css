@@ -1,0 +1,16 @@
+.input-ac {
+    font-family: "Libre Franklin", sans-serif;
+    @apply w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none transition-all duration-200 bg-white text-gray-800;
+}
+
+.input-ac:focus {
+    @apply ring-2 ring-acnhGreen-200 shadow-md;
+}
+
+.select-ac {
+    @apply input-ac cursor-pointer;
+}
+
+.textarea-ac {
+    @apply input-ac resize-none min-h-32;
+}

@@ -1,0 +1,12 @@
+.header-menu {
+    @apply fixed top-5 left-1/2 transform -translate-x-1/2 flex items-center gap-12 z-50 px-8 py-4 rounded-2xl bg-acnhBlue-100;
+}
+
+.nav-link-ac {
+    font-family: "Zilla Slab", serif;
+    @apply text-acnhNeutre-600 font-bold text-lg;
+}
+
+.nav-link-ac-active {
+    @apply text-acnhNeutre-900 font-bold;
+}

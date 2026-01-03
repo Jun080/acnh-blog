@@ -1,0 +1,33 @@
+.hero-header {
+    @apply relative w-full h-screen flex items-center justify-center overflow-hidden bg-acnhGreen-100;
+}
+
+.hero-illustration-bg {
+    @apply absolute bottom-0 left-0 w-full h-full bg-bottom bg-repeat-x;
+    background-image: url("../../../public/img/footer-illustration.svg");
+    margin-bottom: -2px
+}
+
+.hero-content {
+    @apply relative z-10 w-full h-full flex items-center justify-between gap-12;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero-left {
+    @apply flex-1 flex flex-col justify-center gap-6;
+}
+
+.hero-right {
+    @apply flex-1 flex items-center justify-end;
+}
+
+.bg-pattern-leaves {
+    background-image: url("../../../public/img/pattern-leaves-white.jpg");
+    background-attachment: fixed;
+}
+
+.bg-pattern-confetti {
+    background-image: url("../../../public/img/pattern-confetti.jpg");
+    background-attachment: fixed;
+}
