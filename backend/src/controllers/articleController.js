@@ -52,7 +52,7 @@ function getAllArticles(req, res) {
 
     const query = {};
     if (categorie) query.categorie = categorie;
-    if (statut) query.statut = statut;
+    if (statut) query.statut = statut === "publie" ? "publié" : statut;
     if (search) {
         query.$or = [
             { titre: { $regex: search, $options: "i" } },

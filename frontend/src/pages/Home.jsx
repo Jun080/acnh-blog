@@ -24,7 +24,7 @@ function Home() {
                 params.append("page", page);
                 params.append("limit", limit);
                 params.append("sort", "-createdAt");
-                params.append("statut", "publié");
+                params.append("statut", "publie");
                 if (selectedCategory) params.append("categorie", selectedCategory);
                 if (searchTerm) params.append("search", searchTerm);
 
