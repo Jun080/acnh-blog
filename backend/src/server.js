@@ -5,6 +5,7 @@ import cors from "cors";
 import { connectDB } from "./config/database.js";
 import articleRouter from "./routes/articles.js";
 import authRouter from "./routes/auth.js";
+import commentRouter from "./routes/comments.js";
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use("/uploads", express.static("uploads"));
 
 app.use("/api/articles", articleRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/comments", commentRouter);
 
 async function startServer() {
     try {
