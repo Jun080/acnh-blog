@@ -9,6 +9,7 @@ import CreateArticle from "./pages/CreateArticle";
 import EditArticle from "./pages/EditArticle";
 import ArticleDetail from "./pages/ArticleDetail";
 import MyArticles from "./pages/MyArticles";
+import Profile from "./pages/Profile";
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/articles/:id/edit" element={<EditArticle />} />
                     <Route path="/articles/:id" element={<ArticleDetail />} />
                     <Route path="/my-articles" element={<MyArticles />} />
+                    <Route path="/profile" element={<Profile />} />
                 </Routes>
             </div>
         </Router>
