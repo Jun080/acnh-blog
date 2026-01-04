@@ -6,7 +6,7 @@ const Profile = () => {
 	const [loading, setLoading] = useState(true);
 	const [message, setMessage] = useState("");
 	const [user, setUser] = useState({ nom: "", email: "", createdAt: "" });
-	const [stats, setStats] = useState({ articles: 0, commentaires: 0 });
+	const [stats, setStats] = useState({ articles: 0, commentaires: 0, vues: 0 });
 
 	const [nom, setNom] = useState("");
 	const [email, setEmail] = useState("");
@@ -35,7 +35,7 @@ const Profile = () => {
 				return;
 			}
 			setUser(data.user);
-			setStats(data.stats || { articles: 0, commentaires: 0 });
+			setStats(data.stats || { articles: 0, commentaires: 0, vues: 0 });
 			setNom(data.user.nom || "");
 			setEmail(data.user.email || "");
 		} catch (error) {
@@ -135,6 +135,8 @@ const Profile = () => {
 						<p className="text-acnhNeutre-900 font-bold text-3xl">{stats.articles}</p>
 						<p className="text-acnhNeutre-700 mt-4">Commentaires</p>
 						<p className="text-acnhNeutre-900 font-bold text-3xl">{stats.commentaires}</p>
+						<p className="text-acnhNeutre-700 mt-4">Vues totales</p>
+						<p className="text-acnhNeutre-900 font-bold text-3xl">{stats.vues || 0}</p>
 					</div>
 
                     <div className="flex flex-col gap-4 h-full justify-end">

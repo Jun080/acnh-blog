@@ -173,14 +173,20 @@ const MyArticles = () => {
                                 </div>
 
                                 <div className="p-6 flex flex-col flex-1 justify-between gap-7">
-                                    <div className="flex justify-between">
+                                    <div className="flex justify-between items-start flex-wrap gap-3">
                                         <div className="flex justify-center items-center gap-2">
                                             <img src="/img/icons/icon-passport.png" alt="passport icon" className="w-7 h-7" />
                                             <p className="text-acnhNeutre-900 font-bold">{article.auteur}</p>
                                         </div>
-                                        <div className="flex justify-center items-center gap-2">
-                                            <img src="/img/icons/icon-calendrier.png" alt="calendar icon" className="w-7 h-7" />
-                                            <p className="text-acnhNeutre-900 font-bold">{new Date(article.createdAt).toLocaleDateString()}</p>
+                                        <div className="flex flex-col justify-center items-end gap-1">
+                                            <div className="flex justify-center items-center gap-2">
+                                                <img src="/img/icons/icon-calendrier.png" alt="calendar icon" className="w-7 h-7" />
+                                                <p className="text-acnhNeutre-900 font-bold">{article.createdAt ? new Date(article.createdAt).toLocaleDateString() : ''}</p>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span role="img" aria-label="vues" className="text-lg">👁️</span>
+                                                <p className="text-acnhNeutre-900 font-bold">{article.vues || 0} vues</p>
+                                            </div>
                                         </div>
                                     </div>
 

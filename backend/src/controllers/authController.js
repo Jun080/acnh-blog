@@ -92,10 +92,16 @@ export const getProfile = async (req, res) => {
             articleOwnerFilter.push({ auteur: user.nom });
         }
 
-        const [articleCount, commentCount] = await Promise.all([
+        const [articleCount, commentCount, viewsAgg] = await Promise.all([
             Article.countDocuments({ $or: articleOwnerFilter }),
             Comment.countDocuments({ auteur: user._id }),
+            Article.aggregate([
+                { $match: { $or: articleOwnerFilter } },
+                { $group: { _id: null, total: { $sum: "$vues" } } },
+            ]),
         ]);
+
+        const totalVues = viewsAgg?.[0]?.total || 0;
 
         res.status(200).json({
             success: true,
@@ -108,6 +114,7 @@ export const getProfile = async (req, res) => {
             stats: {
                 articles: articleCount,
                 commentaires: commentCount,
+                vues: totalVues,
             },
         });
     } catch (error) {

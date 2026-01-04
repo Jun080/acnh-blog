@@ -215,6 +215,11 @@ const ArticleDetail = () => {
                                     {new Date(article.createdAt).toLocaleDateString()}
                                 </span>
                             </div>
+
+                            <div className="flex items-center gap-2">
+                                <span role="img" aria-label="vues" className="text-lg">👁️</span>
+                                <span className="text-acnhNeutre-900 font-bold">{article.vues || 0} vues</span>
+                            </div>
                         </div>
                         
                         <div className="mb-6">

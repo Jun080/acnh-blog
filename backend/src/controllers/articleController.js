@@ -91,7 +91,11 @@ function getAllArticles(req, res) {
 }
 
 function getArticleById(req, res) {
-    Article.findById(req.params.id)
+    Article.findByIdAndUpdate(
+        req.params.id,
+        { $inc: { vues: 1 } },
+        { new: true }
+    )
         .then(function (art) {
             if (!art) return res.json({ error: "Not found" });
             const articleWithIcon = {
