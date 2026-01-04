@@ -35,3 +35,7 @@ body p {
     font-family: "Libre Franklin", sans-serif;
     @apply text-base;
 }
+
+footer li {
+    font-family: "Zilla Slab", serif;
+}
