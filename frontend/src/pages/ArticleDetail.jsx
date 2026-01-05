@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { getIconStyle } from "../utils/iconStyles";
 
 const ArticleDetail = () => {
@@ -24,8 +24,8 @@ const ArticleDetail = () => {
                     try {
                         const payload = JSON.parse(atob(token.split('.')[1]));
 
-                        const authorCheck = payload.nom && data.auteur
-                            ? payload.nom.toLowerCase() === data.auteur.toLowerCase()
+                        const authorCheck = payload.userId && data.auteurId
+                            ? payload.userId === data.auteurId
                             : false;
 
                         setIsAuthor(authorCheck);
@@ -206,7 +206,11 @@ const ArticleDetail = () => {
                         <div className="flex flex-wrap items-center gap-6 py-6 mb-8 border-b-2 border-dashed border-acnhNeutre-200">
                             <div className="flex items-center gap-2">
                                 <img src="/img/icons/icon-passport.png" alt="" className="w-7 h-7" />
-                                <span className="text-acnhNeutre-900 font-bold">{article.auteur}</span>
+                                {article.auteurPublic && article.auteurId ? (
+                                    <Link to={`/users/${article.auteurId}`} className="text-acnhNeutre-900 font-bold underline">{article.auteur}</Link>
+                                ) : (
+                                    <span className="text-acnhNeutre-900 font-bold">{article.auteur}</span>
+                                )}
                             </div>
 
                             <div className="flex items-center gap-2">

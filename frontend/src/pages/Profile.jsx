@@ -7,6 +7,7 @@ const Profile = () => {
 	const [message, setMessage] = useState("");
 	const [user, setUser] = useState({ nom: "", email: "", createdAt: "" });
 	const [stats, setStats] = useState({ articles: 0, commentaires: 0, vues: 0 });
+	const [isPublic, setIsPublic] = useState(false);
 
 	const [nom, setNom] = useState("");
 	const [email, setEmail] = useState("");
@@ -38,6 +39,7 @@ const Profile = () => {
 			setStats(data.stats || { articles: 0, commentaires: 0, vues: 0 });
 			setNom(data.user.nom || "");
 			setEmail(data.user.email || "");
+			setIsPublic(Boolean(data.user.isPublic));
 		} catch (error) {
 			setMessage("Erreur de connexion au serveur");
 		} finally {
@@ -56,7 +58,7 @@ const Profile = () => {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${token}`,
 				},
-				body: JSON.stringify({ nom, email }),
+				body: JSON.stringify({ nom, email, isPublic }),
 			});
 			const data = await res.json();
 			if (!res.ok || !data.success) {
@@ -128,6 +130,8 @@ const Profile = () => {
 						<p className="text-acnhNeutre-900 font-bold">{user.email}</p>
 						<p className="text-acnhNeutre-700 mt-4">Inscription</p>
 						<p className="text-acnhNeutre-900 font-bold">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : ""}</p>
+						<p className="text-acnhNeutre-700 mt-4">Visibilité</p>
+						<p className="text-acnhNeutre-900 font-bold">{isPublic ? "Profil public" : "Profil privé"}</p>
 					</div>
 
 					<div className="bg-white rounded-3xl border-4 border-acnhBlue-200 p-6">
@@ -169,6 +173,16 @@ const Profile = () => {
 								onChange={(e) => setEmail(e.target.value)}
 								required
 								className="block w-full rounded-2xl border-2 py-2.5 px-3 bg-acnhNeutre-100 text-acnhNeutre-900"
+							/>
+						</div>
+
+						<div className="flex items-center justify-between">
+							<label className="font-bold text-acnhNeutre-900">Profil public</label>
+							<input
+								type="checkbox"
+								checked={isPublic}
+								onChange={(e) => setIsPublic(e.target.checked)}
+								className="h-5 w-5 border-acnhNeutre-300"
 							/>
 						</div>
 

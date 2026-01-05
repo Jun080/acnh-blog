@@ -68,12 +68,15 @@ function getAllArticles(req, res) {
         Article.find(query)
             .sort(sort)
             .skip(skip)
-            .limit(limitNum),
+            .limit(limitNum)
+            .populate("auteurId", "isPublic"),
         Article.countDocuments(query),
     ])
         .then(function ([list, total]) {
             const articlesWithIcon = list.map(article => ({
                 ...article.toObject(),
+                auteurId: article.auteurId?._id?.toString?.() || article.auteurId?.toString?.(),
+                auteurPublic: Boolean(article.auteurId?.isPublic),
                 icon: Article.getCategorieIcon(article.categorie)
             }));
 
@@ -96,10 +99,13 @@ function getArticleById(req, res) {
         { $inc: { vues: 1 } },
         { new: true }
     )
+        .populate("auteurId", "isPublic")
         .then(function (art) {
             if (!art) return res.json({ error: "Not found" });
             const articleWithIcon = {
                 ...art.toObject(),
+                auteurId: art.auteurId?._id?.toString?.() || art.auteurId?.toString?.(),
+                auteurPublic: Boolean(art.auteurId?.isPublic),
                 icon: Article.getCategorieIcon(art.categorie)
             };
             return res.json(articleWithIcon);
@@ -139,17 +145,14 @@ function deleteArticle(req, res) {
 
 // GET MY ARTICLES
 function getMyArticles(req, res) {
-    // pour avoir les articles via req.user.userId ET via req.user.nom
-    const criteria = [{ auteurId: req.user.userId }];
-    if (req.user.nom) {
-        criteria.push({ auteur: req.user.nom });
-    }
-
-    Article.find({ $or: criteria })
+    Article.find({ auteurId: req.user.userId })
         .limit(100)
+        .populate("auteurId", "isPublic")
         .then(function (list) {
             const articlesWithIcon = list.map(article => ({
                 ...article.toObject(),
+                auteurId: article.auteurId?._id?.toString?.() || article.auteurId?.toString?.(),
+                auteurPublic: Boolean(article.auteurId?.isPublic),
                 icon: Article.getCategorieIcon(article.categorie)
             }));
             return res.json(articlesWithIcon);

@@ -181,7 +181,13 @@ function Home() {
                                                 <div className="flex justify-between items-start flex-wrap gap-3">
                                                     <div className="flex justify-center items-center gap-2">
                                                         <img src="/img/icons/icon-passport.png" alt="passport icon" className="w-7 h-7" />
-                                                        <p className="text-acnhNeutre-900 font-bold">{article.auteur}</p>
+                                                        {article.auteurPublic && article.auteurId ? (
+                                                            <Link to={`/users/${article.auteurId}`} className="text-acnhNeutre-900 font-bold underline">
+                                                                {article.auteur}
+                                                            </Link>
+                                                        ) : (
+                                                            <p className="text-acnhNeutre-900 font-bold">{article.auteur}</p>
+                                                        )}
                                                     </div>
                                                     <div className="flex flex-col justify-center items-end gap-1">
                                                         <div className="flex justify-center items-center gap-2">

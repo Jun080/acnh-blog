@@ -8,6 +8,7 @@ import { connectDB } from "./config/database.js";
 import articleRouter from "./routes/articles.js";
 import authRouter from "./routes/auth.js";
 import commentRouter from "./routes/comments.js";
+import userRouter from "./routes/users.js";
 
 dotenv.config();
 
@@ -61,6 +62,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/articles", articleRouter);
 app.use("/api/auth", authLimiter, authRouter);
 app.use("/api/comments", commentRouter);
+app.use("/api/users", userRouter);
 
 app.use((err, req, res, next) => {
     const status = err.status || 500;

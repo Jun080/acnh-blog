@@ -11,6 +11,7 @@ import EditArticle from "./pages/EditArticle";
 import ArticleDetail from "./pages/ArticleDetail";
 import MyArticles from "./pages/MyArticles";
 import Profile from "./pages/Profile";
+import PublicProfil from "./pages/PublicProfil";
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/articles/:id" element={<ArticleDetail />} />
                     <Route path="/my-articles" element={<MyArticles />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/users/:id" element={<PublicProfil />} />
                 </Routes>
                 <Footer />
             </div>

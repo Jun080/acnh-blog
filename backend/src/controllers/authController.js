@@ -87,16 +87,11 @@ export const getProfile = async (req, res) => {
     try {
         const user = req.user;
 
-        const articleOwnerFilter = [{ auteurId: user._id }];
-        if (user.nom) {
-            articleOwnerFilter.push({ auteur: user.nom });
-        }
-
         const [articleCount, commentCount, viewsAgg] = await Promise.all([
-            Article.countDocuments({ $or: articleOwnerFilter }),
+            Article.countDocuments({ auteurId: user._id }),
             Comment.countDocuments({ auteur: user._id }),
             Article.aggregate([
-                { $match: { $or: articleOwnerFilter } },
+                { $match: { auteurId: user._id } },
                 { $group: { _id: null, total: { $sum: "$vues" } } },
             ]),
         ]);
@@ -110,6 +105,7 @@ export const getProfile = async (req, res) => {
                 nom: user.nom,
                 email: user.email,
                 createdAt: user.createdAt,
+                isPublic: user.isPublic,
             },
             stats: {
                 articles: articleCount,
@@ -124,14 +120,12 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
     try {
-        const { nom, email } = req.body;
+        const { nom, email, isPublic } = req.body;
 
         const user = await User.findById(req.user._id);
         if (!user) {
             return res.status(404).json({ success: false, message: "Utilisateur introuvable" });
         }
-
-        const previousNom = user.nom;
 
         if (email && email !== user.email) {
             const existingEmail = await User.findOne({ email });
@@ -142,22 +136,50 @@ export const updateProfile = async (req, res) => {
 
         if (nom) user.nom = nom;
         if (email) user.email = email;
+        if (typeof isPublic === "boolean") user.isPublic = isPublic;
 
         await user.save();
 
-        const articleFilter = [{ auteurId: user._id }];
-        if (previousNom) {
-            articleFilter.push({ auteur: previousNom });
-        }
-        await Article.updateMany({ $or: articleFilter }, { auteur: user.nom });
+        await Article.updateMany({ auteurId: user._id }, { auteur: user.nom });
 
         res.status(200).json({
             success: true,
             message: "Profil mis à jour",
-            user: { id: user._id, nom: user.nom, email: user.email, createdAt: user.createdAt },
+            user: { id: user._id, nom: user.nom, email: user.email, createdAt: user.createdAt, isPublic: user.isPublic },
         });
     } catch (error) {
         res.status(500).json({ success: false, message: "Erreur serveur", error: error.message });
+    }
+};
+
+export const getPublicProfileById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ success: false, message: "Utilisateur introuvable" });
+        if (!user.isPublic) return res.status(403).json({ success: false, message: "Profil privé" });
+
+        const articles = await Article.find({ statut: "publié", auteurId: user._id }).sort({ createdAt: -1 });
+
+        const articlesWithIcon = articles.map((article) => ({
+            ...article.toObject(),
+            icon: Article.getCategorieIcon(article.categorie),
+            auteurId: article.auteurId?.toString?.(),
+            auteurPublic: true,
+        }));
+
+        return res.status(200).json({
+            success: true,
+            user: {
+                id: user._id,
+                nom: user.nom,
+                email: user.email,
+                createdAt: user.createdAt,
+                isPublic: user.isPublic,
+            },
+            articles: articlesWithIcon,
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Erreur serveur", error: error.message });
     }
 };
 
