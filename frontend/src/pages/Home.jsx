@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getIconStyle } from "../utils/iconStyles";
+import { Meta } from "../components/Meta";
 
 function Home() {
     const [articles, setArticles] = useState([]);
@@ -56,9 +57,14 @@ function Home() {
         setPage(1);
     };
 
-    
-
     return (
+        <>
+            <Meta 
+                title="Archipel ACNH - Blog Animal Crossing | Partagez vos découvertes"
+                description="Découvrez et partagez vos articles sur Animal Crossing New Horizons. Trouvailles, décoration, villageois et actualités."
+                image="http://localhost:3001/logo.png"
+                url="http://localhost:3001"
+            />
         <div>
             <header className="hero-header">
                 <div className="hero-illustration-bg"></div>
@@ -247,6 +253,7 @@ function Home() {
                 </section>
             </main>
         </div>
+        </>
     );
 }
 

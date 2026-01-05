@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Meta } from "../components/Meta";
 import RegisterForm from "../components/auth/RegisterForm";
 
 const Register = () => {
@@ -63,6 +64,13 @@ const Register = () => {
     };
 
     return (
+        <>
+            <Meta 
+                title="Inscription | Archipel ACNH"
+                description="Créez votre compte Archipel ACNH et commencez à partager vos découvertes."
+                image="http://localhost:3001/logo.png"
+                url="http://localhost:3001/register"
+            />
         <div className="min-h-screen grid grid-cols-2">
             <div className="relative min-h-screen">
                 <img src="/img/login-bg.jpg" alt="image du jeu animal crossing new horizon" className="absolute inset-0 h-full w-full object-cover" />
@@ -91,6 +99,7 @@ const Register = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

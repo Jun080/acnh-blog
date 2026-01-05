@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { getIconStyle } from "../utils/iconStyles";
+import { Meta } from "../components/Meta";
 
 const ArticleDetail = () => {
     const [article, setArticle] = useState(null);
@@ -181,8 +182,14 @@ const ArticleDetail = () => {
             <p>Chargement...</p>
         );
     }
-
     return (
+        <>
+            <Meta 
+                title={`${article.titre}`}
+                description={article.contenu?.substring(0, 155)}
+                image={`http://localhost:3000/uploads/${article.image}`}
+                url={`http://localhost:3001/articles/${article?._id}`}
+            />
         <div className="min-h-screen bg-pattern-confetti pb-24 pt-36">
             <div className="container">
                 <div className="mx-auto">
@@ -337,6 +344,7 @@ const ArticleDetail = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

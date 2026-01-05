@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Meta } from "../components/Meta";
 
 const Profile = () => {
 	const navigate = useNavigate();
@@ -111,6 +112,13 @@ const Profile = () => {
     }
 
 	return (
+        <>
+            <Meta 
+                title="Mes Articles | Archipel ACNH"
+                description="Gérez tous vos articles publiés et vos brouillons sur Archipel ACNH."
+                image="http://localhost:3001/logo.png"
+                url="http://localhost:3001/my-articles"
+            />
 		<div className="min-h-screen bg-acnhBlue-50 pb-24 pt-36">
 			<div className="container">
 				<h1 className="text-acnhGreen-600 mb-4">Mon profil</h1>
@@ -130,8 +138,6 @@ const Profile = () => {
 						<p className="text-acnhNeutre-900 font-bold">{user.email}</p>
 						<p className="text-acnhNeutre-700 mt-4">Inscription</p>
 						<p className="text-acnhNeutre-900 font-bold">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : ""}</p>
-						<p className="text-acnhNeutre-700 mt-4">Visibilité</p>
-						<p className="text-acnhNeutre-900 font-bold">{isPublic ? "Profil public" : "Profil privé"}</p>
 					</div>
 
 					<div className="bg-white rounded-3xl border-4 border-acnhBlue-200 p-6">
@@ -176,16 +182,6 @@ const Profile = () => {
 							/>
 						</div>
 
-						<div className="flex items-center justify-between">
-							<label className="font-bold text-acnhNeutre-900">Profil public</label>
-							<input
-								type="checkbox"
-								checked={isPublic}
-								onChange={(e) => setIsPublic(e.target.checked)}
-								className="h-5 w-5 border-acnhNeutre-300"
-							/>
-						</div>
-
 						<button type="submit" className="btn-ac btn-ac-green w-full justify-center">
 							Sauvegarder
 						</button>
@@ -226,6 +222,7 @@ const Profile = () => {
                 </div>
 			</div>
 		</div>
+        </>
 	);
 };
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { getIconStyle } from "../utils/iconStyles";
+import { Meta } from "../components/Meta";
 
 const MyArticles = () => {
     const [articles, setArticles] = useState([]);
@@ -103,6 +104,13 @@ const MyArticles = () => {
     };
 
     return (
+        <>
+            <Meta 
+                title="Mes Articles | Archipel ACNH"
+                description="Gérez tous vos articles publiés et vos brouillons sur Archipel ACNH."
+                image="http://localhost:3001/logo.png"
+                url="http://localhost:3001/my-articles"
+            />
         <div className="min-h-screen bg-acnhBlue-50 pb-24 pt-36">
             <div className="container">
                 <div className="flex items-center justify-between mb-8">
@@ -232,6 +240,7 @@ const MyArticles = () => {
                 )}
             </div>
         </div>
+        </>
     );
 };
 

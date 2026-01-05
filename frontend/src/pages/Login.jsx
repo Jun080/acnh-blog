@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Meta } from "../components/Meta";
 import LoginForm from "../components/auth/LoginForm";
 
 const Login = () => {
@@ -34,6 +35,13 @@ const Login = () => {
     };
 
     return (
+        <>
+            <Meta 
+                title="Connexion | Archipel ACNH"
+                description="Connectez-vous à votre compte Archipel ACNH pour publier vos articles."
+                image="http://localhost:3001/logo.png"
+                url="http://localhost:3001/login"
+            />
         <div className="min-h-screen grid grid-cols-2">
             <div className="relative min-h-screen">
                 <img src="/img/login-bg.jpg" alt="image du jeu animal crossing new horizon" className="absolute inset-0 h-full w-full object-cover" />
@@ -59,6 +67,7 @@ const Login = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
