@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { getIconStyle } from "../utils/iconStyles";
+import { Meta } from "../components/Meta";
 
 const ArticleDetail = () => {
     const [article, setArticle] = useState(null);
@@ -24,8 +25,8 @@ const ArticleDetail = () => {
                     try {
                         const payload = JSON.parse(atob(token.split('.')[1]));
 
-                        const authorCheck = payload.nom && data.auteur
-                            ? payload.nom.toLowerCase() === data.auteur.toLowerCase()
+                        const authorCheck = payload.userId && data.auteurId
+                            ? payload.userId === data.auteurId
                             : false;
 
                         setIsAuthor(authorCheck);
@@ -181,8 +182,14 @@ const ArticleDetail = () => {
             <p>Chargement...</p>
         );
     }
-
     return (
+        <>
+            <Meta 
+                title={`${article.titre}`}
+                description={article.contenu?.substring(0, 155)}
+                image={`http://localhost:3000/uploads/${article.image}`}
+                url={`http://localhost:3001/articles/${article?._id}`}
+            />
         <div className="min-h-screen bg-pattern-confetti pb-24 pt-36">
             <div className="container">
                 <div className="mx-auto">
@@ -206,7 +213,11 @@ const ArticleDetail = () => {
                         <div className="flex flex-wrap items-center gap-6 py-6 mb-8 border-b-2 border-dashed border-acnhNeutre-200">
                             <div className="flex items-center gap-2">
                                 <img src="/img/icons/icon-passport.png" alt="" className="w-7 h-7" />
-                                <span className="text-acnhNeutre-900 font-bold">{article.auteur}</span>
+                                {article.auteurPublic && article.auteurId ? (
+                                    <Link to={`/users/${article.auteurId}`} className="text-acnhNeutre-900 font-bold underline">{article.auteur}</Link>
+                                ) : (
+                                    <span className="text-acnhNeutre-900 font-bold">{article.auteur}</span>
+                                )}
                             </div>
 
                             <div className="flex items-center gap-2">
@@ -214,6 +225,11 @@ const ArticleDetail = () => {
                                 <span className="text-acnhNeutre-900">
                                     {new Date(article.createdAt).toLocaleDateString()}
                                 </span>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                <span role="img" aria-label="vues" className="text-lg">👁️</span>
+                                <span className="text-acnhNeutre-900 font-bold">{article.vues || 0} vues</span>
                             </div>
                         </div>
                         
@@ -243,7 +259,10 @@ const ArticleDetail = () => {
 
                                 {isAuthor && (
                                     <div className="flex gap-3">
-                                        <button onClick={() => handleToggleStatus(article._id, article.statut)}>
+                                        <button 
+                                            onClick={() => handleToggleStatus(article._id, article.statut)}
+                                            className={`btn-ac ${article.statut === "publié" ? "btn-ac-orange" : "btn-ac-green"}`}
+                                        >
                                             {article.statut === "publié" ? "Brouillon" : "Publier"}
                                         </button>
                                         <button 
@@ -254,7 +273,7 @@ const ArticleDetail = () => {
                                         </button>
                                         <button 
                                             onClick={handleDelete}
-                                            className="px-6 py-2 bg-red-500 text-white rounded-2xl font-bold hover:bg-red-600 transition-colors"
+                                            className="btn-ac btn-ac-red"
                                         >
                                             Supprimer
                                         </button>
@@ -325,6 +344,7 @@ const ArticleDetail = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

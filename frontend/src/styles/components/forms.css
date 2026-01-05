@@ -14,3 +14,7 @@
 .textarea-ac {
     @apply input-ac resize-none min-h-32;
 }
+
+label {
+    @apply font-bold;
+}

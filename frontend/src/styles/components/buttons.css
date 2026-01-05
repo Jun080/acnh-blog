@@ -24,6 +24,26 @@ button.btn-ac-orange:hover {
     @apply bg-acnhOrange-500 text-acnhNeutre-600;
 }
 
+.btn-ac-red,
+button.btn-ac-red {
+    @apply btn-ac bg-red-500 text-white;
+}
+
+.btn-ac-red:hover,
+button.btn-ac-red:hover {
+    @apply bg-red-600;
+}
+
 .btn-ac-icon {
     @apply flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl border-2 px-4 font-bold;
+}
+
+.btn-ac-outline-orange,
+button.btn-ac-outline-orange {
+    @apply btn-ac bg-acnhOrange-100 text-acnhNeutre-600 border-2 border-acnhOrange-500;
+}
+
+.btn-ac-outline-orange:hover,
+button.btn-ac-outline-orange:hover {
+    @apply bg-acnhOrange-500 text-acnhNeutre-600 border-acnhOrange-500;
 }

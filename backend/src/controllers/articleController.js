@@ -6,6 +6,7 @@ async function createArticle(req, res) {
         const { titre, contenu, categorie, statut } = req.body;
 
         const auteur = req.user.nom;
+        const auteurId = req.user.userId;
 
         let imagePath = null;
         if (req.file) {
@@ -16,6 +17,7 @@ async function createArticle(req, res) {
             titre,
             contenu,
             auteur,
+            auteurId,
             categorie: categorie,
             statut: statut || "publié",
             image: imagePath,
@@ -39,21 +41,74 @@ async function createArticle(req, res) {
 
 // READ
 function getAllArticles(req, res) {
-    Article.find()
-        .limit(100)
-        .then(function (list) {
-            return res.json(list);
+    const {
+        page = 1,
+        limit = 10,
+        sort = "-createdAt",
+        categorie,
+        statut,
+        search,
+    } = req.query;
+
+    const query = {};
+    if (categorie) query.categorie = categorie;
+    if (statut) query.statut = statut === "publie" ? "publié" : statut;
+    if (search) {
+        query.$or = [
+            { titre: { $regex: search, $options: "i" } },
+            { contenu: { $regex: search, $options: "i" } },
+        ];
+    }
+
+    const pageNum = Math.max(parseInt(page, 10) || 1, 1);
+    const limitNum = Math.min(Math.max(parseInt(limit, 10) || 10, 1), 100);
+    const skip = (pageNum - 1) * limitNum;
+
+    Promise.all([
+        Article.find(query)
+            .sort(sort)
+            .skip(skip)
+            .limit(limitNum)
+            .populate("auteurId", "isPublic"),
+        Article.countDocuments(query),
+    ])
+        .then(function ([list, total]) {
+            const articlesWithIcon = list.map(article => ({
+                ...article.toObject(),
+                auteurId: article.auteurId?._id?.toString?.() || article.auteurId?.toString?.(),
+                auteurPublic: Boolean(article.auteurId?.isPublic),
+                icon: Article.getCategorieIcon(article.categorie)
+            }));
+
+            return res.json({
+                items: articlesWithIcon,
+                total,
+                page: pageNum,
+                limit: limitNum,
+                pageCount: Math.ceil(total / limitNum) || 1,
+            });
         })
         .catch(function (err) {
-            return res.json({ error: err.message });
+            return res.status(500).json({ error: err.message });
         });
 }
 
 function getArticleById(req, res) {
-    Article.findById(req.params.id)
+    Article.findByIdAndUpdate(
+        req.params.id,
+        { $inc: { vues: 1 } },
+        { new: true }
+    )
+        .populate("auteurId", "isPublic")
         .then(function (art) {
             if (!art) return res.json({ error: "Not found" });
-            return res.json(art);
+            const articleWithIcon = {
+                ...art.toObject(),
+                auteurId: art.auteurId?._id?.toString?.() || art.auteurId?.toString?.(),
+                auteurPublic: Boolean(art.auteurId?.isPublic),
+                icon: Article.getCategorieIcon(art.categorie)
+            };
+            return res.json(articleWithIcon);
         })
         .catch(function (err) {
             return res.json({ error: err.message });
@@ -62,13 +117,18 @@ function getArticleById(req, res) {
 
 // UPDATE
 function updateArticle(req, res) {
-    Article.findByIdAndUpdate(req.params.id, req.body || {}, { new: true })
+    const updates = { ...req.body };
+
+    if (req.file) {
+        updates.image = req.file.filename;
+    }
+
+    Article.findByIdAndUpdate(req.params.id, updates, { new: true })
         .then(function (updated) {
-            if (!updated) return res.json({ error: "Not found" });
             return res.json(updated);
         })
         .catch(function (err) {
-            return res.json({ error: err.message });
+            return res.status(500).json({ error: err.message });
         });
 }
 
@@ -85,14 +145,43 @@ function deleteArticle(req, res) {
 
 // GET MY ARTICLES
 function getMyArticles(req, res) {
-    Article.find({ auteur: req.user.nom })
+    Article.find({ auteurId: req.user.userId })
         .limit(100)
+        .populate("auteurId", "isPublic")
         .then(function (list) {
-            return res.json(list);
+            const articlesWithIcon = list.map(article => ({
+                ...article.toObject(),
+                auteurId: article.auteurId?._id?.toString?.() || article.auteurId?.toString?.(),
+                auteurPublic: Boolean(article.auteurId?.isPublic),
+                icon: Article.getCategorieIcon(article.categorie)
+            }));
+            return res.json(articlesWithIcon);
         })
         .catch(function (err) {
             return res.json({ error: err.message });
         });
 }
 
-export { createArticle, getAllArticles, getArticleById, updateArticle, deleteArticle, getMyArticles };
+// PUBLISH
+function publierArticle(req, res) {
+    Article.findByIdAndUpdate(req.params.id, { statut: "publié" }, { new: true })
+        .then(function (updated) {
+            return res.json(updated);
+        })
+        .catch(function (err) {
+            return res.status(500).json({ error: err.message });
+        });
+}
+
+// SET DRAFT
+function brouillonArticle(req, res) {
+    Article.findByIdAndUpdate(req.params.id, { statut: "brouillon" }, { new: true })
+        .then(function (updated) {
+            return res.json(updated);
+        })
+        .catch(function (err) {
+            return res.status(500).json({ error: err.message });
+        });
+}
+
+export { createArticle, getAllArticles, getArticleById, updateArticle, deleteArticle, getMyArticles, publierArticle, brouillonArticle };

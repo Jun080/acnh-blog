@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getIconStyle } from "../utils/iconStyles";
+import { Meta } from "../components/Meta";
 
 function Home() {
     const [articles, setArticles] = useState([]);
@@ -24,7 +25,7 @@ function Home() {
                 params.append("page", page);
                 params.append("limit", limit);
                 params.append("sort", "-createdAt");
-                params.append("statut", "publié");
+                params.append("statut", "publie");
                 if (selectedCategory) params.append("categorie", selectedCategory);
                 if (searchTerm) params.append("search", searchTerm);
 
@@ -56,9 +57,14 @@ function Home() {
         setPage(1);
     };
 
-    
-
     return (
+        <>
+            <Meta 
+                title="Archipel ACNH - Blog Animal Crossing | Partagez vos découvertes"
+                description="Découvrez et partagez vos articles sur Animal Crossing New Horizons. Trouvailles, décoration, villageois et actualités."
+                image="http://localhost:3001/logo.png"
+                url="http://localhost:3001"
+            />
         <div>
             <header className="hero-header">
                 <div className="hero-illustration-bg"></div>
@@ -146,7 +152,7 @@ function Home() {
                                         placeholder="Rechercher un article..."
                                         value={searchTerm}
                                         onChange={(e) => handleSearch(e.target.value)}
-                                        className="block w-full rounded-2xl border-2 border-acnhNeutre-200 bg-acnhNeutre-100 py-2.5 pl-10 pr-4 text-acnhNeutre-900 shadow-inner placeholder:text-acnhNeutre-600 focus:border-acnhOrange-600 focus:ring-2 focus:ring-acnhOrange-600/40 focus:outline-none transition-transform duration-150 focus:scale-[1.01]"
+                                        className="block w-full rounded-2xl border-2 border-acnhNeutre-200 bg-acnhNeutre-100 py-2.5 pl-10 pr-4 text-acnhNeutre-900 placeholder:text-acnhNeutre-600"
                                     />
                                 </div>
                             </div>
@@ -178,19 +184,31 @@ function Home() {
                                             </div>
 
                                             <div className="p-6 flex flex-col flex-1 justify-between gap-7">
-                                                <div className="flex justify-between">
+                                                <div className="flex justify-between items-start flex-wrap gap-3">
                                                     <div className="flex justify-center items-center gap-2">
                                                         <img src="/img/icons/icon-passport.png" alt="passport icon" className="w-7 h-7" />
-                                                        <p className="text-acnhNeutre-900 font-bold">{article.auteur}</p>
+                                                        {article.auteurPublic && article.auteurId ? (
+                                                            <Link to={`/users/${article.auteurId}`} className="text-acnhNeutre-900 font-bold underline">
+                                                                {article.auteur}
+                                                            </Link>
+                                                        ) : (
+                                                            <p className="text-acnhNeutre-900 font-bold">{article.auteur}</p>
+                                                        )}
                                                     </div>
-                                                    <div className="flex justify-center items-center gap-2">
-                                                        <img src="/img/icons/icon-calendrier.png" alt="calendar icon" className="w-7 h-7" />
-                                                        <p className="text-acnhNeutre-900 font-bold">{article.createdAt ? new Date(article.createdAt).toLocaleDateString() : ''}</p>
+                                                    <div className="flex flex-col justify-center items-end gap-1">
+                                                        <div className="flex justify-center items-center gap-2">
+                                                            <img src="/img/icons/icon-calendrier.png" alt="calendar icon" className="w-7 h-7" />
+                                                            <p className="text-acnhNeutre-900 font-bold">{article.createdAt ? new Date(article.createdAt).toLocaleDateString() : ''}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span role="img" aria-label="vues" className="text-lg">👁️</span>
+                                                            <p className="text-acnhNeutre-900 font-bold">{article.vues || 0} vues</p>
+                                                        </div>
                                                     </div>
                                                 </div>
 
                                                 <div>
-                                                    <h3 className="font-semibold text-acnhNeutre-900 mb-2 line-clamp-2">
+                                                    <h3 className="text-acnhNeutre-900 mb-2 line-clamp-2">
                                                         <Link to={`/articles/${article._id}`}>
                                                             {article.titre}
                                                         </Link>
@@ -235,6 +253,7 @@ function Home() {
                 </section>
             </main>
         </div>
+        </>
     );
 }
 

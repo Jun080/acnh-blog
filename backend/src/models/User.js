@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema(
             required: [true, "Le mot de passe est requis"],
             minlength: [6, "Le mot de passe doit contenir au moins 6 caractères"],
         },
+        isPublic: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,
