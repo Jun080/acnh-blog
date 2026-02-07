@@ -18,12 +18,25 @@ app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
+const allowedOrigins = [
+  "http://localhost:3001",               // dev local
+  "https://acnh-blog-1.onrender.com"     // frontend Render
+];
+
 app.use(
-    cors({
-        origin: "http://localhost:3001",
-        credentials: true,
-    })
+  cors({
+    origin: function(origin, callback){
+      if(!origin) return callback(null, true); // Postman / serveur
+      if(allowedOrigins.indexOf(origin) === -1){
+        const msg = `CORS policy: origin ${origin} not allowed`;
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
 );
+
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
