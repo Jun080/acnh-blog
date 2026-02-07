@@ -20,8 +20,6 @@ app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-import cors from "cors";
-
 const allowedOrigins = [
   "http://localhost:3001",               // dev local
   "https://acnh-blog-1.onrender.com"     // frontend Render
