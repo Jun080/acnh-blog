@@ -9,6 +9,8 @@ import articleRouter from "./routes/articles.js";
 import authRouter from "./routes/auth.js";
 import commentRouter from "./routes/comments.js";
 import userRouter from "./routes/users.js";
+import fs from "fs";
+import path from "path";
 
 dotenv.config();
 
@@ -69,6 +71,9 @@ app.get("/", (req, res) => {
         status: "le serveur fonctionne à merveille",
     });
 });
+
+const uploadDir = path.join(process.cwd(), "uploads");
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
 app.use("/uploads", express.static("uploads"));
 
