@@ -70,7 +70,7 @@ const PublicProfil = () => {
 									<article key={article._id} className={`flex flex-col h-full border-2 ${getIconStyle(article.categorie)} rounded-lg overflow-hidden`}>
 										<div className="relative h-48 bg-acnhNeutre-200">
 											{article.image ? (
-												<img src={`http://localhost:3000/uploads/${article.image}`} alt={article.titre} className="w-full h-full object-cover" />
+												<img src={`${process.env.REACT_APP_UPLOADS_URL}/${article.image}`} alt={article.titre} className="w-full h-full object-cover" />
 											) : (
 												<div className="w-full h-full flex items-center justify-center text-acnhNeutre-600">Pas d'image</div>
 											)}

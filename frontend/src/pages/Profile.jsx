@@ -116,8 +116,8 @@ const Profile = () => {
             <Meta 
                 title="Mes Articles | Archipel ACNH"
                 description="Gérez tous vos articles publiés et vos brouillons sur Archipel ACNH."
-                image="http://localhost:3001/logo.png"
-                url="http://localhost:3001/my-articles"
+                image="https://acnh-blog-1.onrender.com/logo.png"
+                url="https://acnh-blog-1.onrender.com/my-articles"
             />
 		<div className="min-h-screen bg-acnhBlue-50 pb-24 pt-36">
 			<div className="container">

@@ -39,8 +39,8 @@ const Login = () => {
             <Meta 
                 title="Connexion | Archipel ACNH"
                 description="Connectez-vous à votre compte Archipel ACNH pour publier vos articles."
-                image="http://localhost:3001/logo.png"
-                url="http://localhost:3001/login"
+                image="https://acnh-blog-1.onrender.com/logo.png"
+                url="https://acnh-blog-1.onrender.com/login"
             />
         <div className="min-h-screen grid grid-cols-2">
             <div className="relative min-h-screen">

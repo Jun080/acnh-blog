@@ -68,8 +68,8 @@ const Register = () => {
             <Meta 
                 title="Inscription | Archipel ACNH"
                 description="Créez votre compte Archipel ACNH et commencez à partager vos découvertes."
-                image="http://localhost:3001/logo.png"
-                url="http://localhost:3001/register"
+                image="https://acnh-blog-1.onrender.com/logo.png"
+                url="https://acnh-blog-1.onrender.com/register"
             />
         <div className="min-h-screen grid grid-cols-2">
             <div className="relative min-h-screen">

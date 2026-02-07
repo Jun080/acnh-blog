@@ -187,8 +187,8 @@ const ArticleDetail = () => {
             <Meta 
                 title={`${article.titre}`}
                 description={article.contenu?.substring(0, 155)}
-                image={`http://localhost:3000/uploads/${article.image}`}
-                url={`http://localhost:3001/articles/${article?._id}`}
+                image={`${process.env.REACT_APP_UPLOADS_URL}/${article.image}`}
+                url={`https://acnh-blog-1.onrender.com/articles/${article?._id}`}
             />
         <div className="min-h-screen bg-pattern-confetti pb-24 pt-36">
             <div className="container">
@@ -197,7 +197,7 @@ const ArticleDetail = () => {
                         
                         <div className="relative h-64">
                             {article.image ? (
-                                <img src={`http://localhost:3000/uploads/${article.image}`} alt={article.titre} className="w-full h-full object-cover rounded-2xl" />
+                                <img src={`${process.env.REACT_APP_UPLOADS_URL}/${article.image}`} alt={article.titre} className="w-full h-full object-cover rounded-2xl" />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center text-acnhNeutre-600">Pas d'image</div>
                             )}

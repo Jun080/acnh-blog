@@ -72,7 +72,7 @@ npm install
 # frontend/.env
 PORT=3001
 REACT_APP_API_URL=http://localhost:3000/api
-REACT_APP_UPLOADS_URL=http://localhost:3000/uploads
+REACT_APP_UPLOADS_URL=https://acnh-blog.onrender.com/uploads
 ```
 
 #### Démarrer le serveur
