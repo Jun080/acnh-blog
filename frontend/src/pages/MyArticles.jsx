@@ -108,8 +108,8 @@ const MyArticles = () => {
             <Meta 
                 title="Mes Articles | Archipel ACNH"
                 description="Gérez tous vos articles publiés et vos brouillons sur Archipel ACNH."
-                image="http://localhost:3001/logo.png"
-                url="http://localhost:3001/my-articles"
+                image="https://acnh-blog-1.onrender.com/logo.png"
+                url="https://acnh-blog-1.onrender.com/my-articles"
             />
         <div className="min-h-screen bg-acnhBlue-50 pb-24 pt-36">
             <div className="container">
@@ -162,7 +162,7 @@ const MyArticles = () => {
                             <article key={article._id} className={`flex flex-col h-full border-2 ${getIconStyle(article.categorie)} rounded-lg overflow-hidden`}>
                                 <div className="relative h-48 bg-acnhNeutre-200">
                                     {article.image ? (
-                                        <img src={`http://localhost:3000/uploads/${article.image}`} alt={article.titre} className="w-full h-full object-cover" />
+                                        <img src={`${process.env.REACT_APP_UPLOADS_URL}/${article.image}`} alt={article.titre} className="w-full h-full object-cover" />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center text-acnhNeutre-600">Pas d'image</div>
                                     )}
